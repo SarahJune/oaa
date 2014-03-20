@@ -12,21 +12,15 @@ module.exports = Backbone.Router.extend({
            'users': 'index'},
 
   show: function(id){
-    var user = new User({"_id": String(id)}); //is assigning id, not finding =?
-    //console.log(this.user.first_name);
+    var user = new User({"_id": String(id)});
     user.fetch({
       reset: true,
       success: function() {
-        console.log(user.first_name);
         var userProfileView = new UserProfileView({model: user});
-        $('.mainContent').replaceWith(userProfileView.el);  //make a new view
-        console.log('hello')
+        $('.mainContent').replaceWith(userProfileView.el);
       },
       error: function() {console.log('error')}
     });
-
-
-
     console.log(id);
   },
 
@@ -39,7 +33,7 @@ module.exports = Backbone.Router.extend({
     $('.mainContent').replaceWith(this.userListView.el);
   },
 
-  initialize: function(){ //when browser.js creates a new UserRoutes (1)
+  initialize: function(){
     this.userList = new UserCollection();
     this.userListView = new UserCollectionView({collection: this.userList});
   }
