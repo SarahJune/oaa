@@ -19,7 +19,7 @@ module.exports = Backbone.Router.extend({
         var userProfileView = new UserProfileView({model: user});
         $('.mainContent').replaceWith(userProfileView.el);
       },
-      error: function() {console.log('error')}
+      error: function() {console.log('error');}
     });
   },
 
