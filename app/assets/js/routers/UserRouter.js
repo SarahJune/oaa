@@ -21,7 +21,6 @@ module.exports = Backbone.Router.extend({
       },
       error: function() {console.log('error')}
     });
-    console.log(id);
   },
 
   start: function(){ //browers.js calls this (2)
