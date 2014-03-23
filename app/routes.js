@@ -1,4 +1,3 @@
-// app/routes.js
 //jshint unused:false
 'use strict';
 
