@@ -4,6 +4,24 @@ In this tutorial we will lay out the steps to test a RESTful web service built
 with [Node](http://nodejs.com), [Express](http://expressjs.com), and
 [Grunt](http://gruntjs.com/). And, we put a BackboneJS Front-End app on top of it.
 
+- [Setup](#setup)
+- [API Tests](#api-tests)
+- [Acceptance Tests](#acceptance-tests)
+- [Bower and Browserify](#bower)
+- [Copy Task / Build folder](#copy)
+- [Database Seeds](#seeds)
+- [Underscore Templates](#underscore-templates)
+- [Handlebars Front-End Templates](#handlebars-front-end-templates)
+- [Continuous Integration](#ci)
+- [Code Coverage](#coverage)
+- [Complexity](#complexity)
+- [Code Climate](#codeclimate)
+- [Front-End Testing](#front-end-testing)
+- [Authentication](#auth)
+- [Passport](#passport)
+- [Server Side Templating](#server-side-templating)
+
+<a name="setup"></a>
 ## Setup
 Set up your package.json to track dependencies:
 `npm init`
@@ -151,6 +169,7 @@ afterEach(function (done) {
 
 ```
 
+<a name="api-tests"></a>
 ## Write our tests for users
 
 Install Chai and Supertest
@@ -227,6 +246,7 @@ describe('Users JSON api', function(){
 
 ```
 
+<a name="acceptance-tests"></a>
 ## Write our first acceptance test
 
 To write our acceptance test we'll need to make sure to start the server.
@@ -341,6 +361,7 @@ module.exports = function(grunt) {
 I've re-organied the tasks a bit above, and added a `test:acceptance` task that
 sets up the express server in dev mode, and then runs the casper tests.
 
+<a name="bower"></a>
 ## Set up Bower
 `bower init`
 defaults are ok
@@ -535,6 +556,7 @@ var appView = new AppView();
 appView.render();
 ````
 
+<a name="copy"></a>
 ## Copy in HTML and Image assets to public
 ### Hook up Sass
 
@@ -559,6 +581,7 @@ sass: {
 }
 ```
 
+<a name="seeds"></a>
 ## Create a Seeds Build Task
 
 You frequently need sample data to test with or use in development. This data is
@@ -607,6 +630,7 @@ mongoimport: {
 }
 ```
 
+<a name="underscore-templates"></a>
 ## Use Underscore Templates Based on a Script Tag in Index.
 
 You can create templates and store small ones in index.html
@@ -628,6 +652,7 @@ Use jQuery to grab the template and compile it in your view render method.
   }
 ```
 
+<a name="handlebars-front-end-templates"></a>
 ## Use Handlebars for templating with Backbone, Browserify, and Grunt
 
 `npm install hbsfy --save-dev`
@@ -688,6 +713,7 @@ render: function() {
 }
 ```
 
+<a name="ci"></a>
 ## Continuous Integration
 
 Now that your tests are running, it's time to automate them every time you push
@@ -749,6 +775,7 @@ Travis installed. `gem install travis`
 You'll want to check out the brief help: `help travis` . The travis gem is also
 how you will end up encrypting any environment keys needed on TravisCI.
 
+<a name="coverage"></a>
 ## Code Coverage
 
 Code coverage is a measurement of how much code your tests have actually executed.
@@ -812,6 +839,7 @@ Check out [Our Gemnasium report](https://gemnasium.com/codefellows/oaa), and get
 it running for your project according to their instructions.
 Add their badge to your project README.
 
+<a name="complexity"></a>
 ## Complexity
 
 ### Reading
@@ -847,6 +875,7 @@ TODO: integrate with Grunt?
 TIP: you may want to add the complexity and coverage reports to your .gitignore.
 Because they are always changing, they will add a lot of noise to your commits.
 
+<a name="codeclimate"></a>
 ### Code Climate
 
 [Code Climate](https://codeclimate.com/) offers code quality (complexity) metrics
@@ -855,6 +884,7 @@ for Ruby and JavaScript projects.
 Please, use judgement with this tool. Don't go for all A's
 [according to the founder of Code Climate](https://gist.github.com/brynary/21369b5892525e1bd102).
 
+<a name="front-end-testing"></a>
 ## Front-End testing
 
 Seattleite [Ryan Roemer](https://twitter.com/ryan_roemer) literally
@@ -867,6 +897,7 @@ Note that slides go up and down in addition to left/right. BTW, this is a
 To really improve our code coverage, we are going to have to improve our front-end
 testing.
 
+<a name="auth"></a>
 ## Authentication and Authorization
 
 Authentication answers the question "Who are you?". Authorization answers the
@@ -915,6 +946,7 @@ app.use(passport.session());
 app.use(flash());
 ```
 
+<a name="passport"></a>
 ### Passport Configuration
 
 in `server.js`:
@@ -1049,6 +1081,7 @@ schema.methods.validPassword = function(password) {
 module.exports = mongoose.model('User', schema);
 ```
 
+<a name="server-side-templating"></a>
 ### Server Side Templating
 
 I'm installing [Consolidate.JS](https://github.com/visionmedia/consolidate.js/)
