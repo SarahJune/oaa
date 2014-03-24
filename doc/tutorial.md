@@ -1161,3 +1161,18 @@ function isLoggedIn(req, res, next) {
 }
 
 ```
+
+## Refactoring our Meeting agenda
+
+### Install async library via Bower
+`bower install async --save`
+
+Our debowerify transform will take care of loading it in and we can simply
+`require ('async');` in `browser.js`.
+
+The problem is that if both meeting.fetch and agendaItemsList.fetch take 3
+seconds each, then the total time is 6 seconds. Let's put these tasks in
+parallel. The performance benefit we will see is that both tasks will run at
+the same time, so the max time will now be 3 seconds.
+
+### Refactor the the fetch tasks to the array parallel tasks
