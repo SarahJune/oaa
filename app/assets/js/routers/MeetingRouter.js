@@ -2,6 +2,7 @@
 
 var Backbone                 = require('backbone');
 var $                        = require('jquery');
+var async                    = require('async');
 var Meeting                  = require('../models/Meeting');
 var MeetingCollection        = require('../models/MeetingCollection');
 var MeetingView              = require('../views/MeetingView');
@@ -34,28 +35,49 @@ module.exports = Backbone.Router.extend({
     var meeting = new Meeting({id: id});
     var meetingView = new MeetingView({model: meeting});
     var agendaItemsList = new AgendaItemCollection();
+    var meetingData = null;
+    var agendaItemData = null;
 
-    meeting.fetch({
-      error: function(model, xhr, options) {
-        console.log(JSON.parse(xhr.responseText).errors);
-      },
-      success: function(model, response, options) {
-        var meetingView = new MeetingView({model: model});
+    async.parallel(
+      [
+        // Meeting Model fetch
+        function (callback)
+        {
+          meeting.fetch({
+            error: function(model, xhr, options) {
+              callback(JSON.parse(xhr.responseText).errors);
+            },
+            success: function(model, response, options) {
+              meetingData = model;
+              callback(null, meetingData);
+            }
+          );
+        },
+        // Agenda Items Model fetch
+        function (callback)
+        {
+          agendaItemsList.fetch({
+            success: function(model, response, options) {
+              callback();
+            },
+            error: function(model, xhr, options) {
+              callback(JSON.parse(xhr.responseText).errors);
+            }
+          });
+        }
+      ],
+      // Once everything has completed, do this...
+      function (error, result)
+      {
+        var meetingView = new MeetingView({model: meetingData});
         meetingView.render();
         $('.mainContent').replaceWith(meetingView.el);
 
-        agendaItemsList.fetch({
-          success: function() {
-            var agendaItemsView = new AgendaItemCollectionView({collection: agendaItemsList});
-            agendaItemsView.belongsToMeeting(id);
-            $('.agendaItems').replaceWith(agendaItemsView.el);
-          },
-          error: function(model, xhr, options) {
-            console.log(JSON.parse(xhr.responseText).errors);
-          }
-        });
+        var agendaItemsView = new AgendaItemCollectionView({collection: agendaItemsList});
+        agendaItemsView.belongsToMeeting(id);
+        $('.agendaItems').replaceWith(agendaItemsView.el);
       }
-    });
+    );
   },
 
   initialize: function() {
