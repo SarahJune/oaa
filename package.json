@@ -43,7 +43,7 @@
     "grunt-mongo-drop": "^0.1.1"
   },
   "scripts": {
-    "test": "mkdir -p build && grunt travis --trace --verbose"
+    "test": "grunt travis"
   },
   "config": {
     "blanket": {
