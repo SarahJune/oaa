@@ -39,7 +39,7 @@ app.configure('development', function() {
 
 
 app.configure(function() {
-  app.use(express.bodyParser());
+  app.use(express.json());
   app.use(express.cookieParser());
   app.use(express.static(path.join(__dirname, 'build')));
   // session secret TODO move to node-foreman's .env / process.env
