@@ -1,5 +1,4 @@
 'use strict';
-//jshint unused:false
 
 function startServer() {
   // Initialize 'newrelic' if a license key is present
@@ -101,8 +100,8 @@ function startServer() {
 
   var server = http.createServer(app);
 
-  server.listen(3000, function(){
-    console.log('Running on port 3000');
+  server.listen(port, function(){
+    console.log('Running on port ' + port);
   });
 }
 
@@ -119,7 +118,8 @@ if (process.env.CLUSTER === 'true') {
     }
 
     cluster.on('exit', function(worker, code, signal) {
-      console.log('worker ', worker.process.pid, ' has died a horrible, slow death.');
+      console.log('worker ', worker.process.pid, ' has died a horrible, slow death.', code, signal);
+      cluster.fork();
     });
 
   // Child processes will execute this
