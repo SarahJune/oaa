@@ -41,9 +41,11 @@ function startServer() {
     app.use(express.json());
     app.use(express.cookieParser());
     app.use(express.static(path.join(__dirname, 'build')));
+    var RedisStore = require('connect-redis')(express);
+    var redisOptions = { db: 'sessions', post: 6379, host: '127.0.0.1' };
     // session secret TODO move to node-foreman's .env / process.env
     var session_secret = process.env.OAA_SESSION_SECRET || 'CHANGEMECHANGEMECHANGEMECHANGEME';
-    app.use(express.session({ secret: session_secret }));
+    app.use(express.session({ store: new RedisStore(redisOptions), secret: session_secret }));
     app.use(passport.initialize());
     // persistent login sessions (do not want for REST API)
     app.use(passport.session());
@@ -104,22 +106,27 @@ function startServer() {
   });
 }
 
-var cluster = require('cluster');
-var numCPUs = require('os').cpus().length;
-var worker;
 
-if (cluster.isMaster) {
-  for (var i = 0; i < numCPUs; i++) {
-    worker = cluster.fork();
-    console.log('Worker ', worker.process.pid, ' has spawned.');
+if (process.env.CLUSTER === 'true') {
+  var numCPUs = parseInt(process.env.NUM_CHILDREN) || require('os').cpus().length;
+  var cluster = require('cluster');
+  var worker;
+
+  if (cluster.isMaster) {
+    for (var i = 0; i < numCPUs; i++) {
+      worker = cluster.fork();
+      console.log('Worker ', worker.process.pid, ' has spawned.');
+    }
+
+    cluster.on('exit', function(worker, code, signal) {
+      console.log('worker ', worker.process.pid, ' has died a horrible, slow death.');
+    });
+
+  // Child processes will execute this
+  } else {
+    console.log('Starting web server on', process.pid);
+    startServer();
   }
-
-  cluster.on('exit', function(worker, code, signal) {
-    console.log('worker ', worker.process.pid, ' has died a horrible, slow death.');
-  });
-
-// Child processes will execute this
 } else {
-  console.log('Starting web server on', process.pid);
   startServer();
 }
