@@ -3,7 +3,7 @@ node_js:
 - '0.10'
 services:
   - mongodb
-  - redis
+  - redis-server
 before_install:
 - npm install -g grunt-cli
 - npm install -g bower
