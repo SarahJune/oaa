@@ -1176,3 +1176,51 @@ parallel. The performance benefit we will see is that both tasks will run at
 the same time, so the max time will now be 3 seconds.
 
 ### Refactor the the fetch tasks to the array parallel tasks
+
+
+## Nested Models
+
+### API
+Use only one mongoose.connect statement per environment
+
+- Create Meeting.js
+  - embedded objects
+    - don't have their own collection
+    - are contained within another object
+  - nested objects
+    - have their own collection
+    - can be accessed outside of their containing object
+- Create Meeting api routes
+- Create AgendaItem.js
+- Create agendItemRoutes.js
+- Create routes in sever.js/agendaItemRoutes for:
+  - get collection
+  - get meeting collection
+  - get single
+  - post with meeting
+  - post without meeting
+  - update and delete are the same
+
+### Backbone
+- Create Meeting.js in backbone
+- Create MeetingView.js
+- Create ShortMeetingView.js
+  - multiple views allow different displays for different contexts
+- Create MeetingForm.js
+  - can be used for either editing or creation
+- Create MeetingCollection.js
+- Create MeetingCollectionView.js
+- Create MeetingRouter.js
+  - conflicts with UsersRouter.js
+- Create an ApplicationRouter.js
+  - has the only Backbone.History.start()
+  - inlcudes all of the routers needed for the application
+- Create AgendaItem.js
+- Create AgendaItemView.js
+- Create AgendaItemCollection.js
+- Create AgendaItemCollectionView.js
+- We don't need a router for AgendaItems
+  - will only be accessed through a meeting
+- Add AgendaItems to Meeting show view
+- Create an AgendaItemForm.js
+  - create a way to create an AgendaItem from withing a meeting show page

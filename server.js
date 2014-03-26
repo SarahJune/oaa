@@ -61,9 +61,10 @@ function startServer() {
     mongoose.connect('mongodb://localhost/oaa-test');
   });
 
+  // server generated pages routes
   require('./app/routes.js')(app, passport);
 
-
+  // api routes
   var users = require('./api/routes/userRoutes');
   var meetings = require('./api/routes/meetingRoutes');
   var agendaItems = require('./api/routes/agendaItemRoutes');
