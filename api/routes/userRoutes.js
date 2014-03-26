@@ -7,7 +7,7 @@ exports.collection = function(req, res) {
     if(err) {
       res.send(500, {'error': err});
     } else {
-      res.send(JSON.stringify(users));
+      res.send(users);
     }
   });
 };
@@ -19,6 +19,7 @@ exports.findById = function(req, res) {
     if(err) {
       res.send(500, {'error': err});
     } else {
+      responseUser.local.password = '[FILTERED]';
       res.send(responseUser);
     }
   });

@@ -6,6 +6,7 @@ lib-cov/
 *.out
 *.pid
 *.gz
+*.rdb
 
 pids/
 logs/
@@ -21,3 +22,4 @@ app/bower_components/
 .sass-cache/
 bower_components/
 app/bower_components/
+doc/complexity

@@ -12,7 +12,15 @@ describe('Users JSON api', function(){
 
   it('can create a new user', function(done){
     superagent.post('http://localhost:3000/api/v1/users')
-      .send({first_name: 'Ford', last_name: 'Prefect'})
+      .send(
+        {
+        first_name: 'Ford',
+        last_name: 'Prefect',
+        local: {
+          email: 'fordp@example.com',
+          password: 'valid_password'
+        },
+      })
       .end(function(e, res){
         expect(e).to.eql(null);
         expect(res.body._id).to.not.be.eql(null);
@@ -40,6 +48,15 @@ describe('Users JSON api', function(){
       expect(res.body.first_name).to.be.eql('Ford');
       expect(res.body.last_name).to.be.eql('Prefect');
 
+      done();
+    });
+  });
+
+  it('does not reveal the password hash for a user', function(done) {
+    superagent.get('http://localhost:3000/api/v1/users/' + id).end(function(e, res){
+      if (res.body.local) {
+        expect(res.body.local.password).to.eql('[FILTERED]');
+      }
       done();
     });
   });
