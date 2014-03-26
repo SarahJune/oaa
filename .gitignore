@@ -18,8 +18,10 @@ test/acceptance/*-results.xml
 
 build/
 dist/
-app/bower_components/
 .sass-cache/
 bower_components/
 app/bower_components/
 doc/complexity
+
+# for twitter secrets
+config/auth.js

@@ -11,6 +11,12 @@ var schema = new mongoose.Schema({
   local: {
     email: String,
     password: String
+  },
+  twitter          : {
+    id           : String,
+    token        : String,
+    displayName  : String,
+    username     : String
   }
 });
 

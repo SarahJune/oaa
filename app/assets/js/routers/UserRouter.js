@@ -25,6 +25,6 @@ module.exports = Backbone.Router.extend({
   initialize: function() {
     this.userList = new UserCollection();
     this.userListView = new UserCollectionView({collection: this.userList});
-
   }
+
 });

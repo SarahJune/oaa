@@ -10,7 +10,7 @@ module.exports = Backbone.Router.extend({
   },
 
   initialize: function() {
-    this.userRouter = new UserRouter;
-    this.meetingRouter = new MeetingRouter;
+    this.userRouter = new UserRouter();
+    this.meetingRouter = new MeetingRouter();
   }
 });
