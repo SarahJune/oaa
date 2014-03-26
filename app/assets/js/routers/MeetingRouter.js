@@ -32,7 +32,6 @@ module.exports = Backbone.Router.extend({
 
   show: function(id) {
     var meeting = new Meeting({id: id});
-    var meetingView = new MeetingView({model: meeting});
     var agendaItemsList = new AgendaItemCollection();
 
     meeting.fetch({
@@ -44,10 +43,10 @@ module.exports = Backbone.Router.extend({
         meetingView.render();
         $('.mainContent').replaceWith(meetingView.el);
 
-        agendaItemsList.fetch({
+        agendaItemsList.fetch({data: {_meeting: meeting.id}},{
           success: function() {
             var agendaItemsView = new AgendaItemCollectionView({collection: agendaItemsList});
-            agendaItemsView.belongsToMeeting(id);
+            agendaItemsView.render();
             $('.agendaItems').replaceWith(agendaItemsView.el);
           },
           error: function(model, xhr, options) {
@@ -59,6 +58,7 @@ module.exports = Backbone.Router.extend({
   },
 
   initialize: function() {
+
     this.meetingList = new MeetingCollection();
     this.meetingListView = new MeetingCollectionView({collection: this.meetingList});
   }
