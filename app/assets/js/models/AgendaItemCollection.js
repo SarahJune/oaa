@@ -1,7 +1,7 @@
 'use strict';
 
 var Backbone   = require('backbone');
-var Meeting    = require('./Meeting');
+//var Meeting    = require('./Meeting');
 var AgendaItem = require('./AgendaItem');
 
 module.exports = Backbone.Collection.extend({

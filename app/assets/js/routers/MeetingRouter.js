@@ -1,3 +1,5 @@
+/*jshint -W058 */
+/* to avoid false warnings from http://jslinterrors.com/missing-invoking-a-constructor/ */
 'use strict';
 
 var Backbone                 = require('backbone');
@@ -7,7 +9,6 @@ var MeetingCollection        = require('../models/MeetingCollection');
 var MeetingView              = require('../views/MeetingView');
 var MeetingCollectionView    = require('../views/MeetingCollectionView');
 var MeetingForm              = require('../views/MeetingForm');
-var AgendaItemView           = require('../views/AgendaItemView');
 var AgendaItemCollection     = require('../models/AgendaItemCollection');
 var AgendaItemCollectionView = require('../views/AgendaItemCollectionView');
 
@@ -32,14 +33,13 @@ module.exports = Backbone.Router.extend({
 
   show: function(id) {
     var meeting = new Meeting({id: id});
-    var meetingView = new MeetingView({model: meeting});
     var agendaItemsList = new AgendaItemCollection();
 
     meeting.fetch({
-      error: function(model, xhr, options) {
+      error: function(model, xhr) {
         console.log(JSON.parse(xhr.responseText).errors);
       },
-      success: function(model, response, options) {
+      success: function(model) {
         var meetingView = new MeetingView({model: model});
         meetingView.render();
         $('.mainContent').replaceWith(meetingView.el);
@@ -47,10 +47,10 @@ module.exports = Backbone.Router.extend({
         agendaItemsList.fetch({
           success: function() {
             var agendaItemsView = new AgendaItemCollectionView({collection: agendaItemsList});
-            agendaItemsView.belongsToMeeting(id);
+            agendaItemsView.render();
             $('.agendaItems').replaceWith(agendaItemsView.el);
           },
-          error: function(model, xhr, options) {
+          error: function(model, xhr) {
             console.log(JSON.parse(xhr.responseText).errors);
           }
         });

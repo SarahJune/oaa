@@ -14,7 +14,7 @@ exports.collectionByMeeting = function(req, res) {
 
 exports.collection = function(req, res) {
   res.setHeader('Content-Type', 'application/json');
-  AgendaItem.find({}, function(err, agendaItems) {
+  AgendaItem.find({'_id': String(req.params.data._meeting)}, function(err, agendaItems) {
     if(err) {
       res.send(500, {'error': err});
     } else {
