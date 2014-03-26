@@ -30,12 +30,6 @@ function startServer() {
   app.set('view engine', 'hbs');
   app.set('views', __dirname + '/app/assets/templates');
 
-  app.configure('development', function() {
-    app.use(express.logger('dev'));
-    app.use(express.errorHandler());
-  });
-
-
   app.configure(function() {
     app.use(express.json());
     app.use(express.cookieParser());
@@ -43,7 +37,7 @@ function startServer() {
     var RedisStore = require('connect-redis')(express);
     // example of options
     // var redisOptions = { db: 'sessions', post: 6379, host: '127.0.0.1' };
-     
+
     // session secret TODO move to node-foreman's .env / process.env
     var session_secret = process.env.OAA_SESSION_SECRET || 'CHANGEMECHANGEMECHANGEMECHANGEME';
     app.use(express.session({ store: new RedisStore(), secret: session_secret }));
@@ -57,9 +51,11 @@ function startServer() {
 
 
   app.configure('development', function() {
+    app.use(express.logger('dev'));
     app.use(express.errorHandler());
     mongoose.connect('mongodb://localhost/oaa-development');
   });
+
 
   app.configure('test', function() {
     mongoose.connect('mongodb://localhost/oaa-test');
