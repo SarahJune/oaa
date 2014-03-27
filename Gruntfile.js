@@ -66,7 +66,7 @@ module.exports = function(grunt) {
         src: ['app/assets/js/*.js'],
         dest: 'dist/browser.js',
         options: {
-          transform: ['debowerify','hbsfy'],
+          transform: ['debowerify','hbsfy','uglifyify'],
           debug: false
         }
       },
