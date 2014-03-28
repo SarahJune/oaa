@@ -49,20 +49,18 @@ function startServer() {
     app.use(app.router);
   });
 
-
   app.configure('development', function() {
     app.use(express.logger('dev'));
     app.use(express.errorHandler());
     mongoose.connect('mongodb://localhost/oaa-development');
   });
 
-
   app.configure('test', function() {
     mongoose.connect('mongodb://localhost/oaa-test');
   });
 
   // server generated pages routes
-  require('./app/routes.js')(app, passport);
+  require('./app/routes')(app, passport);
 
   // api routes
   var users = require('./api/routes/userRoutes');
@@ -103,7 +101,6 @@ function startServer() {
     console.log('Running on port ' + port);
   });
 }
-
 
 if (process.env.CLUSTER === 'true') {
   var numCPUs = parseInt(process.env.NUM_CHILDREN) || require('os').cpus().length;
