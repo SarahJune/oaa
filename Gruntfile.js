@@ -19,6 +19,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mongo-drop');
   grunt.loadNpmTasks('grunt-mocha-cov');
   grunt.loadNpmTasks('grunt-concurrent');
+  grunt.loadNpmTasks('grunt-arialinter');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -58,6 +59,17 @@ module.exports = function(grunt) {
         dest: 'build/',
         flatten: false,
         filter: 'isFile'
+      }
+    },
+
+    arialinter: {
+      files: [
+        './app/assets/*.html',
+        './app/assets/templates/*.hbs'
+      ],
+      options: {
+        templates: true,
+        levels: 'A'
       }
     },
 
@@ -252,7 +264,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build:dev', ['clean:dev', 'concurrent:buildDev', 'copy:dev']);
   grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod']);
   grunt.registerTask('test:prepare', ['mongo_drop', 'mongoimport']);
-  grunt.registerTask('test', ['env:test', 'jshint', 'mochacov:unit','mochacov:coverage' ]);
+  grunt.registerTask('test', ['env:test', 'arialinter', 'jshint', 'mochacov:unit','mochacov:coverage' ]);
   grunt.registerTask('travis', ['jshint', 'mochacov:unit', 'mochacov:coverage', 'mochacov:coveralls']);
   grunt.registerTask('server', [ 'env:dev', 'build:dev', 'express:dev', 'watch:express', 'notify' ]);
   grunt.registerTask('test:acceptance',['build:dev', 'express:dev', 'casper']);
