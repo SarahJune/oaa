@@ -21,7 +21,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-arialinter');
   grunt.loadNpmTasks('grunt-forever');
-  grunt.loadNpmTasks('grunt-foreman');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
