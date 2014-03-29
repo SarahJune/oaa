@@ -5,8 +5,8 @@ var os = require('os');
 module.exports = {
 
   'twitterAuth' : {
-    'consumerKey'     : process.env.TWITTER_CONSUMER_KEY,
-    'consumerSecret'  : process.env.TWITTER_CONSUMER_SECRET,
+    'consumerKey'     : process.env.TWITTER_CONSUMER_KEY || 'unknown',
+    'consumerSecret'  : process.env.TWITTER_CONSUMER_SECRET || 'unknown' ,
     'callbackURL'     : 'http://' + os.hostname() + '/auth/twitter/callback'
   }
 
