@@ -19,6 +19,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mongo-drop');
   grunt.loadNpmTasks('grunt-mocha-cov');
   grunt.loadNpmTasks('grunt-concurrent');
+  grunt.loadNpmTasks('grunt-arialinter');
   grunt.loadNpmTasks('grunt-forever');
   grunt.loadNpmTasks('grunt-foreman');
 
@@ -63,6 +64,17 @@ module.exports = function(grunt) {
         dest: 'build/',
         flatten: false,
         filter: 'isFile'
+      }
+    },
+
+    arialinter: {
+      files: [
+        './app/assets/*.html',
+        './app/assets/templates/*.hbs'
+      ],
+      options: {
+        templates: true,
+        levels: 'A'
       }
     },
 
@@ -205,7 +217,7 @@ module.exports = function(grunt) {
     },
     sass: {
       dist: {
-        files: {'build/css/styles.css': 'app/assets/scss/styles.scss'}
+        files: {'dist/css/styles.css': 'app/assets/scss/styles.scss'}
       },
       dev: {
         options: {
@@ -245,7 +257,8 @@ module.exports = function(grunt) {
       }
     },
     concurrent: {
-      buildDev: ['sass:dev', 'browserify:dev', 'jshint:all']
+      buildDev: ['sass:dev', 'browserify:dev', 'jshint:all'],
+      buildProd: ['sass:dist', 'browserify:prod', 'jshint:all']
     },
     mongo_drop: {
       test: {
