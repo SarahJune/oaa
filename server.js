@@ -33,7 +33,6 @@ function startServer() {
   app.configure(function() {
     app.use(express.json());
     app.use(express.cookieParser());
-    app.use(express.static(path.join(__dirname, 'build')));
     var RedisStore = require('connect-redis')(express);
     // example of options
     // var redisOptions = { db: 'sessions', post: 6379, host: '127.0.0.1' };
@@ -50,13 +49,19 @@ function startServer() {
   });
 
   app.configure('development', function() {
+    app.use(express.static(path.join(__dirname, 'build')));
     app.use(express.logger('dev'));
     app.use(express.errorHandler());
     mongoose.connect('mongodb://localhost/oaa-development');
   });
 
   app.configure('test', function() {
+    app.use(express.static(path.join(__dirname, 'build')));
     mongoose.connect('mongodb://localhost/oaa-test');
+  });
+
+  app.configure('production', function() {
+    app.use(express.static(path.join(__dirname, 'dist')));
   });
 
   // server generated pages routes

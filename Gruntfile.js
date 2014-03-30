@@ -20,6 +20,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-cov');
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-arialinter');
+  grunt.loadNpmTasks('grunt-forever');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -32,6 +33,9 @@ module.exports = function(grunt) {
       },
       test: {
         NODE_ENV: 'test'
+      },
+      prod: {
+        NODE_ENV: 'production'
       }
     },
 
@@ -212,7 +216,7 @@ module.exports = function(grunt) {
     },
     sass: {
       dist: {
-        files: {'build/css/styles.css': 'app/assets/scss/styles.scss'}
+        files: {'dist/css/styles.css': 'app/assets/scss/styles.scss'}
       },
       dev: {
         options: {
@@ -252,21 +256,31 @@ module.exports = function(grunt) {
       }
     },
     concurrent: {
-      buildDev: ['sass:dev', 'browserify:dev', 'jshint:all']
+      buildDev: ['sass:dev', 'browserify:dev', 'jshint:all'],
+      buildProd: ['sass:dist', 'browserify:prod', 'jshint:all']
     },
     mongo_drop: {
       test: {
         'uri' : 'mongodb://localhost/oaa-test'
       }
+    },
+    forever: {
+      server: {
+        options: {
+          index: 'server.js',
+          logDir: 'logs'
+        }
+      }
     }
   });
 
   grunt.registerTask('build:dev', ['clean:dev', 'concurrent:buildDev', 'copy:dev']);
-  grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'jshint:all', 'copy:prod']);
+  grunt.registerTask('build:prod', ['clean:prod', 'browserify:prod', 'sass:dist', 'jshint:all', 'copy:prod']);
   grunt.registerTask('test:prepare', ['mongo_drop', 'mongoimport']);
   grunt.registerTask('test', ['env:test', 'jshint', 'mochacov:unit','mochacov:coverage' ]);
   grunt.registerTask('travis', ['jshint', 'mochacov:unit', 'mochacov:coverage', 'mochacov:coveralls']);
-  grunt.registerTask('server', [ 'env:dev', 'build:dev', 'express:dev', 'watch:express', 'notify' ]);
+  grunt.registerTask('server', [ 'env:dev', 'build:dev', 'foreman', 'watch:express', 'notify' ]);
+  grunt.registerTask('server:prod', ['env:prod', 'build:prod', 'foreman']);
   grunt.registerTask('test:acceptance',['build:dev', 'express:dev', 'casper']);
   grunt.registerTask('default', ['jshint', 'test','watch:express']);
 
