@@ -5,13 +5,13 @@
 module.exports = function(app, passport) {
 
   // display the login form
-	app.get('/login', function(req, res) {
+  app.get('/login', function(req, res) {
 
 		// render the page and pass in any flash data if it exists
 		res.render('index', {
-        partials: {'content': 'login'},
-        message: req.flash('loginMessage')
-      });
+			partials: {'content': 'login'},
+			message: req.flash('loginMessage')
+		});
 	});
 
 	// process the login form
@@ -20,6 +20,16 @@ module.exports = function(app, passport) {
 		failureRedirect : '/login', // redirect back to the signup page if there is an error
 		failureFlash : true // allow flash messages
 	}));
+
+	// route for twitter authentication and login
+  app.get('/auth/twitter', passport.authenticate('twitter'));
+
+  // handle the callback after twitter has authenticated the user
+  app.get('/auth/twitter/callback',
+    passport.authenticate('twitter', {
+      successRedirect : '/profile',
+      failureRedirect : '/'
+    }));
 
   // display signup form
   app.get('/signup', function(req, res) {
