@@ -37,7 +37,6 @@ function startServer() {
     // example of options
     // var redisOptions = { db: 'sessions', post: 6379, host: '127.0.0.1' };
 
-    // session secret TODO move to node-foreman's .env / process.env
     var session_secret = process.env.OAA_SESSION_SECRET || 'CHANGEMECHANGEMECHANGEMECHANGEME';
     app.use(express.session({ store: new RedisStore(), secret: session_secret }));
     app.use(passport.initialize());
