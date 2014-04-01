@@ -16,7 +16,6 @@ function startServer() {
   var express  = require('express');
   var app      = express();
   var cons     = require('consolidate');
-  var http     = require('http');
   var path     = require('path');
   var port     = process.env.PORT || 3000;
   var passport = require('passport');
@@ -100,7 +99,7 @@ function startServer() {
   //   res.redirect('/#users' + req.params);
   // });
 
-  var server = http.createServer(app);
+  var server = require('./app/secureServer')(app,port);
 
   server.listen(port, function(){
     console.log('Running on port ' + port);

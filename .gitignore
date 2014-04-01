@@ -28,3 +28,4 @@ config/auth.js
 .vagrant
 .env
 .env.production
+app/secure/*.pem

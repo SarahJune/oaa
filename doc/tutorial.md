@@ -1224,3 +1224,50 @@ Use only one mongoose.connect statement per environment
 - Add AgendaItems to Meeting show view
 - Create an AgendaItemForm.js
   - create a way to create an AgendaItem from withing a meeting show page
+
+## SSL
+
+Since this app deals with confidential data including usernames, passwords, and
+meeting info, let's run the whole thing under HTTPS with an SSL certificate.
+
+Since we are cheap students, we will make our own certificate on our computer.
+When you have a job, your employer or client can pay for the certificate.
+
+The SSL certificate consists of two files, a PEM encoded cert and a private key.
+To create the cert we will need a Certificate Signing Request (CSR) first.
+
+```
+mkdir -p app/secure
+cd app/secure
+openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem
+echo "app/secure/*.pem" >> .gitignore
+```
+
+and create a new file in the `app` directory: `secureServer.js`
+
+```javascript
+/* jshint unused:false */
+
+'use strict';
+
+var fs = require('fs'),
+  https = require('https');
+
+function Server(app, port) {
+    var httpsOptions = {
+      key: fs.readFileSync('./app/secure/key.pem'),
+      cert: fs.readFileSync('./app/secure/cert.pem')
+    };
+
+    return https.createServer(httpsOptions, app).listen(port);
+  }
+
+
+module.exports = Server;
+```
+
+Then make a change to server.js to use our new secureServer:
+
+```javascript
+var server = require('./app/secureServer')(app,port);
+```

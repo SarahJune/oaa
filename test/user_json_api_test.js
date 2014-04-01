@@ -7,7 +7,7 @@ var chai = require('chai'),
   should = chai.should();
 var app = require('../server').app;
 var PORT = process.env.port || 3000;
-var appURL = 'http://localhost:' + PORT;
+var appURL = 'https://localhost:' + PORT;
 
 describe('Users JSON api', function(){
   var id;
