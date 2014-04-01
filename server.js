@@ -100,7 +100,7 @@ function startServer() {
   //   res.redirect('/#users' + req.params);
   // });
 
-  require('./app/secureServer')(app,port);
+  require('./app/secureServer')(app, port);
 }
 
 if (process.env.CLUSTER === 'true') {

@@ -1271,3 +1271,44 @@ Then make a change to server.js to use our new secureServer:
 ```javascript
 var server = require('./app/secureServer')(app,port);
 ```
+
+You will have to also update your api test code to have a configurable URL and
+port, below is how I did it. Notice that you have to tell NodeJS to ignore the
+self-signed SSL cert for the test by setting the NODE_TLS_REJECT_UNAUTHORIZED
+environment variable.
+
+```javascript
+'use strict';
+//jshint unused:false
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED=0;
+
+var superagent = require('superagent');
+var chai = require('chai'),
+  expect = chai.expect,
+  should = chai.should();
+var app = require('../server').app;
+var PORT = process.env.PORT || 3000;
+var appURL = 'https://localhost:' + PORT;
+
+describe('AgendaItem JSON api', function() {
+  var id;
+  var meeting;
+
+  it('needs to successfully set a meeting', function(done) {
+    superagent.post(appURL +'/api/v1/meetings')
+      .send({
+        name: 'My Test Meeting',
+        description: 'This is my meeting there are many like it but this one is mine',
+        starts_at: new Date(),
+      })
+    .end(function(e, res) {
+        expect(e).to.eql(null);
+        expect(res.body._id).to.not.be.eql(null);
+        expect(res.body.name).to.be.eql('My Test Meeting');
+        meeting = res.body;
+
+        done();
+      });
+  });
+```
