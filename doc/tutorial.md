@@ -1312,3 +1312,19 @@ describe('AgendaItem JSON api', function() {
       });
   });
 ```
+
+## Cross Site Request Forgery (CSRF)
+
+CSRF is an attack which forces an end user to execute unwanted actions on a web
+application in which he/she is currently authenticated. With a little help of
+social engineering (like sending a link via email/chat), an attacker may trick
+the users of a web application into executing actions of the attacker's choosing.
+A successful CSRF exploit can compromise end user data and operation in case of
+normal user. If the targeted end user is the administrator account, this can
+compromise the entire web application.
+
+Connect / Express includes CSRF protection middleware out of the box. The
+middleware helps ensure that any change to a resource's state is from a valid
+source, like our application's front-end. It uses a token that is stored in the
+request session: _csrf. Any POST request to our express server needs to pass the
+X-CSRF-Token header.

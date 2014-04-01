@@ -1,4 +1,5 @@
 'use strict';
+/* jshint unused:false */
 
 function startServer() {
   // Initialize 'newrelic' if a license key is present
@@ -17,11 +18,15 @@ function startServer() {
   var app      = express();
   var cons     = require('consolidate');
   var path     = require('path');
+  if (process.env.TRAVIS == 'true') {
+    var http  = require('http');
+  }
   var port     = process.env.PORT || 3000;
   var passport = require('passport');
   var flash    = require('connect-flash');
   var mongoose = require('mongoose');
   require('./config/passport')(passport);
+  require('./app/security')(app);
 
 
   // set up consolidate and handlebars templates
@@ -55,7 +60,7 @@ function startServer() {
 
   app.configure('test', function() {
     app.use(express.static(path.join(__dirname, 'build')));
-    app.use(express.logger('test'));
+    app.use(express.logger('dev'));
     mongoose.connect('mongodb://localhost/oaa-test');
   });
 
@@ -99,8 +104,15 @@ function startServer() {
   // app.get('/users*', function(req, res) {
   //   res.redirect('/#users' + req.params);
   // });
+  if (process.env.TRAVIS == 'true') {
+    var server = http.createServer(app);
 
-  require('./app/secureServer')(app, port);
+    server.listen(port, function(){
+      console.log('Running on port ' + port);
+    });
+  } else {
+    require('./app/secureServer')(app, port);
+  }
 }
 
 if (process.env.CLUSTER === 'true') {

@@ -8,8 +8,12 @@ var chai = require('chai'),
   should = chai.should();
 var app = require('../server').app;
 var PORT = process.env.PORT || 3000;
-var appURL = 'https://localhost:' + PORT;
 
+if (process.env.TRAVIS == 'true') {
+  var appURL = 'http://localhost:' + PORT;
+} else {
+  var appURL = 'https://localhost:' + PORT;
+}
 
 describe('Users JSON api', function(){
   var id;
