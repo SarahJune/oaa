@@ -27,3 +27,4 @@ doc/complexity
 config/auth.js
 .vagrant
 .env
+.env.production

@@ -37,7 +37,7 @@ function startServer() {
     // example of options
     // var redisOptions = { db: 'sessions', post: 6379, host: '127.0.0.1' };
 
-    var session_secret = process.env.OAA_SESSION_SECRET || 'CHANGEMECHANGEMECHANGEMECHANGEME';
+    var session_secret = process.env.OAA_SESSION_SECRET || 'CHANGEME';
     app.use(express.session({ store: new RedisStore(), secret: session_secret }));
     app.use(passport.initialize());
     // persistent login sessions (do not want for REST API)
