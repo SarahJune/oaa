@@ -1,25 +1,30 @@
 'use strict';
+//jshint unused:false
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED=0;
 
 var superagent = require('superagent');
 var chai = require('chai'),
   expect = chai.expect,
   should = chai.should();
 var app = require('../server').app;
+var PORT = process.env.PORT || 3000;
+var appURL = 'https://localhost:' + PORT;
 
 describe('Meetings JSON api', function() {
   var id;
 
   it('can create a new meeting', function(done) {
-    superagent.post('http://localhost:3000/api/v1/meetings')
-      .send({name: "My Test Meeting",
-             description: "Wherein I test the functionality of my meetings api",
+    superagent.post(appURL +'/api/v1/meetings')
+      .send({name: 'My Test Meeting',
+             description: 'Wherein I test the functionality of my meetings api',
              starts_at: new Date(),
-             comments: {body: "Wow, such meeting, so scheduled", author_id: "1"}
+             comments: {body: 'Wow, such meeting, so scheduled', author_id: '1'}
             })
       .end(function(e, res) {
         expect(e).to.eql(null);
         expect(res.body._id).to.not.be.eql(null);
-        expect(res.body.name).to.be.eql("My Test Meeting");
+        expect(res.body.name).to.be.eql('My Test Meeting');
         id = res.body._id;
 
         done();
@@ -27,7 +32,7 @@ describe('Meetings JSON api', function() {
   });
 
   it('can get a meetings collection', function(done) {
-    superagent.get('http://localhost:3000/api/v1/meetings').end(function(e, res) {
+    superagent.get(appURL +'/api/v1/meetings').end(function(e, res) {
       expect(e).to.be.eql(null);
       expect(res.body.length).to.be.above(0);
 
@@ -36,7 +41,7 @@ describe('Meetings JSON api', function() {
   });
 
   it('can get a single meeting', function(done) {
-    superagent.get('http://localhost:3000/api/v1/meetings/' + id).end(function(e, res) {
+    superagent.get(appURL +'/api/v1/meetings/' + id).end(function(e, res) {
       expect(e).to.be.eql(null);
       expect(res.body._id).to.be.eql(id);
       expect(res.body.name).to.be.eql('My Test Meeting');
@@ -46,8 +51,8 @@ describe('Meetings JSON api', function() {
   });
 
   it('can update a meeting', function(done) {
-    superagent.put('http://localhost:3000/api/v1/meetings/' + id)
-      .send({name: "Changed Test Meeting"})
+    superagent.put(appURL +'/api/v1/meetings/' + id)
+      .send({name: 'Changed Test Meeting'})
       .end(function(e, res) {
       expect(e).to.be.eql(null);
       expect(res.body.msg).to.be.eql('success');
@@ -57,7 +62,7 @@ describe('Meetings JSON api', function() {
   });
 
   it('can delete a meeting', function(done) {
-    superagent.del('http://localhost:3000/api/v1/meetings/' + id)
+    superagent.del(appURL +'/api/v1/meetings/' + id)
       .end(function(e, res) {
       expect(e).to.be.eql(null);
       expect(res.body.msg).to.be.eql('success');

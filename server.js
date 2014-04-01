@@ -55,6 +55,7 @@ function startServer() {
 
   app.configure('test', function() {
     app.use(express.static(path.join(__dirname, 'build')));
+    app.use(express.logger('test'));
     mongoose.connect('mongodb://localhost/oaa-test');
   });
 
@@ -99,11 +100,7 @@ function startServer() {
   //   res.redirect('/#users' + req.params);
   // });
 
-  var server = require('./app/secureServer')(app,port);
-
-  server.listen(port, function(){
-    console.log('Running on port ' + port);
-  });
+  require('./app/secureServer')(app,port);
 }
 
 if (process.env.CLUSTER === 'true') {

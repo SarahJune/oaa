@@ -14,5 +14,4 @@ function Server(app, port) {
     return https.createServer(httpsOptions, app).listen(port);
   }
 
-
 module.exports = Server;

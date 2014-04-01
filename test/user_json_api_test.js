@@ -1,13 +1,15 @@
 'use strict';
 //jshint unused:false
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED=0;
 var superagent = require('superagent');
 var chai = require('chai'),
   expect = chai.expect,
   should = chai.should();
 var app = require('../server').app;
-var PORT = process.env.port || 3000;
+var PORT = process.env.PORT || 3000;
 var appURL = 'https://localhost:' + PORT;
+
 
 describe('Users JSON api', function(){
   var id;
