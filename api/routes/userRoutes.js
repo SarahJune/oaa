@@ -7,6 +7,9 @@ exports.collection = function(req, res) {
     if(err) {
       res.send(500, {'error': err});
     } else {
+      users.forEach(function(user){
+        user.local.password = '[FILTERED]';
+      });
       res.send(users);
     }
   });

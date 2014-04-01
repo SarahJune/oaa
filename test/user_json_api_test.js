@@ -6,12 +6,14 @@ var chai = require('chai'),
   expect = chai.expect,
   should = chai.should();
 var app = require('../server').app;
+var PORT = process.env.port || 3000;
+var appURL = 'http://localhost:' + PORT;
 
 describe('Users JSON api', function(){
   var id;
 
   it('can create a new user', function(done){
-    superagent.post('http://localhost:3000/api/v1/users')
+    superagent.post(appURL +'/api/v1/users')
       .send(
         {
         first_name: 'Ford',
@@ -33,7 +35,7 @@ describe('Users JSON api', function(){
   });
 
   it('can get users collection', function(done){
-    superagent.get('http://localhost:3000/api/v1/users').end(function(e, res){
+    superagent.get(appURL + '/api/v1/users').end(function(e, res){
       expect(e).to.eql(null);
       expect(res.body.length).to.be.above(0);
 
@@ -42,7 +44,7 @@ describe('Users JSON api', function(){
   });
 
   it('can get a single user', function(done){
-    superagent.get('http://localhost:3000/api/v1/users/' + id).end(function(e, res){
+    superagent.get(appURL + '/api/v1/users/' + id).end(function(e, res){
       expect(e).to.eql(null);
       expect(res.body._id).to.be.eql(id);
       expect(res.body.first_name).to.be.eql('Ford');
@@ -53,7 +55,16 @@ describe('Users JSON api', function(){
   });
 
   it('does not reveal the password hash for a user', function(done) {
-    superagent.get('http://localhost:3000/api/v1/users/' + id).end(function(e, res){
+    superagent.get(appURL + '/api/v1/users/' + id).end(function(e, res){
+      if (res.body.local) {
+        expect(res.body.local.password).to.eql('[FILTERED]');
+      }
+      done();
+    });
+  });
+
+  it('does not reveal the password hash for list of users', function(done) {
+    superagent.get(appURL + '/api/v1/users').end(function(e, res){
       if (res.body.local) {
         expect(res.body.local.password).to.eql('[FILTERED]');
       }
@@ -62,7 +73,7 @@ describe('Users JSON api', function(){
   });
 
   it('can update a user', function(done){
-    superagent.put('http://localhost:3000/api/v1/users/' + id).send({first_name: 'Arthur', last_name: 'Dent'})
+    superagent.put(appURL + '/api/v1/users/' + id).send({first_name: 'Arthur', last_name: 'Dent'})
     .end(function(e,res){
       expect(e).to.eql(null);
       expect(res.body.msg).to.be.eql('success');
@@ -72,7 +83,7 @@ describe('Users JSON api', function(){
   });
 
   it('can delete a user' , function(done){
-    superagent.del('http://localhost:3000/api/v1/users/' + id).end(function(e,res){
+    superagent.del(appURL + '/api/v1/users/' + id).end(function(e,res){
       expect(e).to.eql(null);
       expect(res.body.msg).to.be.eql('success');
 
