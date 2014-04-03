@@ -23,7 +23,7 @@ with [Node](http://nodejs.com), [Express](http://expressjs.com), and
 
 <a name="setup"></a>
 ## Setup
-Set up your package.json to track dependencies:
+Set up your package.json to track all the dependencies:
 `npm init`
 
 Install modules that integrate grunt and mocha, jshint and watch for changes.
